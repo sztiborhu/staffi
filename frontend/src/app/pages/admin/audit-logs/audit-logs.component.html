@@ -1,0 +1,271 @@
+<!-- Audit Logs Page -->
+<div class="audit-logs-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">history</mat-icon>
+        Audit Naplók
+      </h1>
+      <p class="page-subtitle">Rendszeresemények és felhasználói műveletek nyomon követése</p>
+    </div>
+  </div>
+
+  <!-- Statistics Cards (Admin Only) -->
+  <div class="statistics-grid" *ngIf="isAdmin() && statistics">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">storage</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ statistics.totalLogs }}</span>
+            <span class="stat-label">Összes esemény</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card create">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">add_circle</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ statistics.createActions }}</span>
+            <span class="stat-label">Létrehozás</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card update">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">edit</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ statistics.updateActions }}</span>
+            <span class="stat-label">Módosítás</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card delete">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">delete</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ statistics.deleteActions }}</span>
+            <span class="stat-label">Törlés</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card login">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">login</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ statistics.loginActions }}</span>
+            <span class="stat-label">Bejelentkezés</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filters Card -->
+  <mat-card class="filters-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>filter_list</mat-icon>
+        Szűrők
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="filterForm" class="filters-form">
+        <div class="filter-grid">
+          <!-- Entity Type -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Entitás típus</mat-label>
+            <mat-select formControlName="entityType">
+              <mat-option value="">Összes</mat-option>
+              <mat-option *ngFor="let type of entityTypes" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matIconPrefix>category</mat-icon>
+          </mat-form-field>
+
+          <!-- Action -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Művelet</mat-label>
+            <mat-select formControlName="action">
+              <mat-option value="">Összes</mat-option>
+              <mat-option *ngFor="let action of actions" [value]="action">
+                {{ action }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matIconPrefix>settings</mat-icon>
+          </mat-form-field>
+
+          <!-- User Email -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Felhasználó email</mat-label>
+            <input matInput formControlName="userEmail" placeholder="user@example.com">
+            <mat-icon matIconPrefix>person</mat-icon>
+          </mat-form-field>
+
+          <!-- Start Date -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Kezdő dátum</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <mat-icon matIconPrefix>calendar_today</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- End Date -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Befejező dátum</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <mat-icon matIconPrefix>calendar_today</mat-icon>
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="filter-actions">
+          <button mat-flat-button color="primary" (click)="applyFilters()" type="button">
+            <mat-icon>search</mat-icon>
+            Szűrés
+          </button>
+          <button mat-stroked-button (click)="resetFilters()" type="button">
+            <mat-icon>clear</mat-icon>
+            Törlés
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Audit Logs Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>list</mat-icon>
+        Naplóbejegyzések
+        <span class="record-count" *ngIf="!loading">({{ totalElements }} találat)</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Loading -->
+      <div class="loading-container" *ngIf="loading">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Adatok betöltése...</p>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container" *ngIf="!loading">
+        <table mat-table [dataSource]="auditLogs" class="audit-table">
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef>Időpont</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="timestamp-cell">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ formatTimestamp(log.timestamp) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Művelet</th>
+            <td mat-cell *matCellDef="let log">
+              <mat-chip [class]="getActionClass(log.action)" class="action-chip">
+                {{ log.action }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Entity Type Column -->
+          <ng-container matColumnDef="entityType">
+            <th mat-header-cell *matHeaderCellDef>Entitás</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="entity-cell">
+                <span class="entity-type">{{ log.entityType }}</span>
+                <span class="entity-id">#{{ log.entityId }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- User Column -->
+          <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef>Felhasználó</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="user-cell">
+                <span class="user-email">{{ log.userEmail }}</span>
+                <mat-chip class="role-chip">{{ log.userRole }}</mat-chip>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Leírás</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="description-cell">
+                <span [matTooltip]="log.description">{{ log.description }}</span>
+                <div class="ip-address" *ngIf="log.ipAddress">
+                  <mat-icon>location_on</mat-icon>
+                  {{ log.ipAddress }}
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Details Column -->
+          <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef>Részletek</th>
+            <td mat-cell *matCellDef="let log">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="viewDetails(log)"
+                [disabled]="!hasChanges(log)"
+                matTooltip="Változások megtekintése">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- No Data -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <div class="no-data">
+                <mat-icon>inbox</mat-icon>
+                <p>Nincs megjeleníthető adat</p>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Paginator -->
+        <mat-paginator
+          [length]="totalElements"
+          [pageSize]="pageSize"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="[25, 50, 100, 200]"
+          (page)="onPageChange($event)"
+          showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

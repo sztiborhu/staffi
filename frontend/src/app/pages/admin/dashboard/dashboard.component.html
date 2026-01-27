@@ -1,0 +1,90 @@
+<div class="admin-layout">
+  <!-- Top Navigation Bar -->
+  <mat-toolbar class="top-navbar" color="primary">
+    <button mat-icon-button (click)="toggleSidenav()" class="menu-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="brand">
+      <mat-icon class="brand-icon">corporate_fare</mat-icon>
+      <span class="brand-name">Staffi</span>
+    </div>
+
+    <span class="spacer"></span>
+
+    <!-- User Menu -->
+    <div class="user-section">
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+        <mat-icon>account_circle</mat-icon>
+        <span class="user-name">{{ userData?.lastName }} {{ userData?.firstName }}</span>
+        <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/admin/profile">
+          <mat-icon>person</mat-icon>
+          <span>Profil</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Kijelentkezés</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <!-- Sidenav Container -->
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Side Navigation -->
+    <mat-sidenav
+      #sidenav
+      [opened]="sidenavOpened"
+      [mode]="'side'"
+      class="sidenav">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>dashboard</mat-icon>
+          <span matListItemTitle>Dashboard</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/employees" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Alkalmazottak</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/advances" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>request_quote</mat-icon>
+          <span matListItemTitle>Előlegek</span>
+        </a>
+
+        <mat-divider></mat-divider>
+
+        <a mat-list-item routerLink="/admin/accommodations" routerLinkActive="active-link" *ngIf="userData?.role === 'ADMIN' || userData?.role === 'HR'">
+          <mat-icon matListItemIcon>apartment</mat-icon>
+          <span matListItemTitle>Szállások</span>
+        </a>
+
+        <mat-divider></mat-divider>
+
+        <a mat-list-item routerLink="/admin/audit-logs" routerLinkActive="active-link" *ngIf="userData?.role === 'ADMIN'">
+          <mat-icon matListItemIcon>history</mat-icon>
+          <span matListItemTitle>Audit Naplók</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/user-management" routerLinkActive="active-link" *ngIf="userData?.role === 'ADMIN'">
+          <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+          <span matListItemTitle>Felhasználó Kezelés</span>
+        </a>
+
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Main Content Area -->
+    <mat-sidenav-content class="main-content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+

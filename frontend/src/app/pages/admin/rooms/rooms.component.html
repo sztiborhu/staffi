@@ -1,0 +1,191 @@
+<div class="rooms-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="title-section">
+      <button mat-icon-button (click)="backToAccommodations()" class="back-button" matTooltip="Vissza a szállásokhoz">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="title-content">
+        <h1 class="page-title">
+          <mat-icon class="title-icon">meeting_room</mat-icon>
+          Szobák - {{ accommodationName }}
+        </h1>
+        <p class="page-subtitle">Szobák kezelése és létrehozása</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button
+        mat-stroked-button
+        class="refresh-button"
+        (click)="loadRooms()"
+        [disabled]="loading"
+        matTooltip="Lista frissítése">
+        <mat-icon [class.spinning]="loading">refresh</mat-icon>
+        <span>Frissítés</span>
+      </button>
+      <button
+        *ngIf="userRole === 'ADMIN'"
+        mat-flat-button
+        color="primary"
+        class="add-button"
+        (click)="toggleCreateForm()">
+        <mat-icon>{{ showCreateForm ? 'close' : 'add' }}</mat-icon>
+        <span>{{ showCreateForm ? 'Mégse' : 'Új szoba' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Create Form -->
+  <mat-card *ngIf="showCreateForm" class="create-card">
+    <mat-card-content>
+      <h3 class="card-title">
+        <mat-icon>{{ editMode ? 'edit' : 'add_business' }}</mat-icon>
+        {{ editMode ? 'Szoba szerkesztése' : 'Új szoba hozzáadása' }}
+      </h3>
+
+      <form [formGroup]="createForm" (ngSubmit)="createRoom()" class="create-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Szobaszám</mat-label>
+            <input matInput formControlName="roomNumber" required>
+            <mat-icon matIconPrefix>meeting_room</mat-icon>
+            <mat-error *ngIf="createForm.get('roomNumber')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Kapacitás</mat-label>
+            <input matInput type="number" formControlName="capacity" required min="1">
+            <mat-icon matIconPrefix>groups</mat-icon>
+            <mat-error *ngIf="createForm.get('capacity')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="createForm.get('capacity')?.hasError('min')">
+              Minimum 1 fő
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="submit-button"
+            [disabled]="creating || createForm.invalid">
+            <mat-spinner *ngIf="creating" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!creating">{{ editMode ? 'save' : 'add' }}</mat-icon>
+            <span *ngIf="!creating">{{ editMode ? 'Mentés' : 'Létrehozás' }}</span>
+            <span *ngIf="creating">{{ editMode ? 'Mentés...' : 'Létrehozás...' }}</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Rooms List -->
+  <mat-card class="rooms-card">
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Szobák betöltése...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-container">
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ error }}</p>
+        <button mat-flat-button color="primary" (click)="loadRooms()">
+          <mat-icon>refresh</mat-icon>
+          Újrapróbálás
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && !error && rooms.length === 0" class="empty-container">
+        <mat-icon>meeting_room</mat-icon>
+        <p>Még nincsenek szobák ebben a szállásban</p>
+        <button mat-flat-button color="primary" (click)="toggleCreateForm()">
+          <mat-icon>add</mat-icon>
+          Első szoba hozzáadása
+        </button>
+      </div>
+
+      <!-- Rooms Grid -->
+      <div *ngIf="!loading && !error && rooms.length > 0" class="rooms-grid">
+        <mat-card *ngFor="let room of rooms" class="room-card">
+          <mat-card-content>
+            <div class="room-header">
+              <div class="room-title">
+                <mat-icon>meeting_room</mat-icon>
+                <h3>{{ room.roomNumber }}</h3>
+              </div>
+              <div class="room-actions" *ngIf="userRole === 'ADMIN'">
+                <button
+                  mat-icon-button
+                  color="accent"
+                  (click)="editRoom(room)"
+                  matTooltip="Szoba szerkesztése">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="deleteRoom(room)"
+                  matTooltip="Szoba törlése">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="room-info">
+              <div class="info-item">
+                <mat-icon>groups</mat-icon>
+                <span>Kapacitás: {{ room.capacity }} fő</span>
+              </div>
+              <div class="info-item">
+                <mat-icon>person</mat-icon>
+                <span>Jelenlegi foglaltság: {{ room.currentOccupancy }} fő</span>
+              </div>
+            </div>
+
+            <!-- Occupants -->
+            <mat-expansion-panel *ngIf="room.currentOccupants && room.currentOccupants.length > 0" class="occupants-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>people</mat-icon>
+                  <span>Lakók ({{ room.currentOccupants.length }})</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="occupants-list">
+                <div *ngFor="let occupant of room.currentOccupants" class="occupant-item">
+                  <div class="occupant-info">
+                    <mat-icon>account_circle</mat-icon>
+                    <div class="occupant-details">
+                      <span class="occupant-name">{{ occupant.employeeName }}</span>
+                      <span class="occupant-company">{{ occupant.companyName }}</span>
+                    </div>
+                  </div>
+                  <mat-chip class="check-in-chip">
+                    <mat-icon>event</mat-icon>
+                    {{ formatDate(occupant.checkInDate) }}
+                  </mat-chip>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <!-- Empty Occupants -->
+            <div *ngIf="!room.currentOccupants || room.currentOccupants.length === 0" class="empty-occupants">
+              <mat-icon>hotel</mat-icon>
+              <span>Üres szoba</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

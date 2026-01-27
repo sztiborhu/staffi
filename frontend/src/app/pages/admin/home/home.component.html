@@ -1,0 +1,96 @@
+<div class="dashboard-home">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="title-section">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">dashboard</mat-icon>
+        Dashboard
+      </h1>
+      <p class="page-subtitle">Üdvözöljük a Staffi rendszerben</p>
+    </div>
+    <button
+      mat-stroked-button
+      class="refresh-button"
+      (click)="refreshStats()"
+      [disabled]="loading"
+      matTooltip="Statisztikák frissítése">
+      <mat-icon [class.spinning]="loading">refresh</mat-icon>
+      <span>Frissítés</span>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Statisztikák betöltése...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="refreshStats()">
+      <mat-icon>refresh</mat-icon>
+      Újrapróbálás
+    </button>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div *ngIf="!loading && !error" class="stats-grid">
+    <mat-card class="stat-card" *ngFor="let stat of stats">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon" [style.background-color]="stat.color + '15'">
+            <mat-icon [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+          </div>
+          <div class="stat-details">
+            <span class="stat-value">{{ stat.value }}</span>
+            <span class="stat-title">{{ stat.title }}</span>
+            <span class="stat-subtitle" *ngIf="stat.subtitle">{{ stat.subtitle }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div *ngIf="!loading && !error" class="quick-actions-section">
+    <h2 class="section-title">Gyors műveletek</h2>
+    <div class="actions-grid">
+      <mat-card class="action-card" routerLink="/admin/employees">
+        <mat-card-content>
+          <mat-icon class="action-icon">people</mat-icon>
+          <h3>Alkalmazottak kezelése</h3>
+          <p>Új alkalmazott hozzáadása vagy meglévők szerkesztése</p>
+        </mat-card-content>
+      </mat-card>
+      <!--
+      <mat-card class="action-card">
+        <mat-card-content>
+          <mat-icon class="action-icon">calendar_today</mat-icon>
+          <h3>Beosztás készítése</h3>
+          <p>Új műszakok létrehozása és kezelése</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-card-content>
+          <mat-icon class="action-icon">assignment</mat-icon>
+          <h3>Kérelmek áttekintése</h3>
+          <p>Szabadságkérelmek és egyéb kérések kezelése</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-card-content>
+          <mat-icon class="action-icon">assessment</mat-icon>
+          <h3>Jelentések megtekintése</h3>
+          <p>Statisztikák és jelentések generálása</p>
+        </mat-card-content>
+      </mat-card>
+      -->
+    </div>
+  </div>
+</div>
+
+

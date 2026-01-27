@@ -1,0 +1,254 @@
+<!-- Mobile-First Profile Page -->
+<div class="profile-page">
+  <!-- Top Toolbar -->
+  <mat-toolbar class="top-toolbar">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">Profilom</span>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="page-content">
+    <!-- Loading State -->
+    <mat-card *ngIf="loadingUserData" class="loading-card">
+      <mat-card-content>
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Adatok betöltése...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Header Card -->
+    <mat-card *ngIf="!loadingUserData" class="header-card">
+      <mat-card-content>
+        <div class="header-content">
+          <mat-icon class="header-icon">account_circle</mat-icon>
+          <div class="header-text">
+            <h1>{{ getFullName() }}</h1>
+            <p>{{ userInfo?.email }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Personal Information Card -->
+    <mat-card *ngIf="!loadingUserData && userInfo" class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>person</mat-icon>
+          <span>Személyes adatok</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-section">
+          <h4 class="section-label">
+            <mat-icon>badge</mat-icon>
+            Alapadatok
+          </h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Teljes név</span>
+              <span class="value">{{ getFullName() }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Email cím</span>
+              <span class="value">{{ userInfo.email }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Születési dátum</span>
+              <span class="value">{{ formatDate(userInfo.birthDate) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h4 class="section-label">
+            <mat-icon>description</mat-icon>
+            Hivatalos adatok
+          </h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Adóazonosító jel</span>
+              <span class="value">{{ userInfo.taxId || 'Nincs megadva' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">TAJ szám</span>
+              <span class="value">{{ userInfo.tajNumber || 'Nincs megadva' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Személyi igazolvány</span>
+              <span class="value">{{ userInfo.idCardNumber || 'Nincs megadva' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Állampolgárság</span>
+              <span class="value">{{ userInfo.nationality || 'Nincs megadva' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h4 class="section-label">
+            <mat-icon>contact_phone</mat-icon>
+            Elérhetőség
+          </h4>
+          <div class="info-grid">
+            <div class="info-item full-width">
+              <span class="label">Lakcím</span>
+              <span class="value">{{ userInfo.primaryAddress || 'Nincs megadva' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Telefonszám</span>
+              <span class="value">{{ userInfo.phoneNumber || 'Nincs megadva' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h4 class="section-label">
+            <mat-icon>work</mat-icon>
+            Munkaviszony
+          </h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Cég neve</span>
+              <span class="value">{{ userInfo.companyName || 'Nincs megadva' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Belépés dátuma</span>
+              <span class="value">{{ formatDate(userInfo.startDate) }}</span>
+            </div>
+            <div class="info-item" *ngIf="userInfo.roomNumber">
+              <span class="label">Szobaszám</span>
+              <span class="value room-badge">{{ userInfo.roomNumber }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Státusz</span>
+              <span class="value" [class.active-badge]="userInfo.isActive" [class.inactive-badge]="!userInfo.isActive">
+                {{ userInfo.isActive ? 'Aktív' : 'Inaktív' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Change Password Card -->
+    <mat-card *ngIf="!loadingUserData" class="password-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>lock</mat-icon>
+          <span>Jelszó módosítása</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          <!-- Old Password -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Régi jelszó</mat-label>
+            <input
+              matInput
+              [type]="hideOldPassword ? 'password' : 'text'"
+              formControlName="oldPassword"
+              required>
+            <mat-icon matIconPrefix>lock_outline</mat-icon>
+            <button
+              mat-icon-button
+              matIconSuffix
+              (click)="hideOldPassword = !hideOldPassword"
+              type="button"
+              tabindex="-1">
+              <mat-icon>{{ hideOldPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('oldPassword')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <!-- New Password -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Új jelszó</mat-label>
+            <input
+              matInput
+              [type]="hideNewPassword ? 'password' : 'text'"
+              formControlName="newPassword"
+              required>
+            <mat-icon matIconPrefix>lock</mat-icon>
+            <button
+              mat-icon-button
+              matIconSuffix
+              (click)="hideNewPassword = !hideNewPassword"
+              type="button"
+              tabindex="-1">
+              <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
+              Minimum 6 karakter szükséges
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Confirm Password -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Új jelszó megerősítése</mat-label>
+            <input
+              matInput
+              [type]="hideConfirmPassword ? 'password' : 'text'"
+              formControlName="confirmPassword"
+              required>
+            <mat-icon matIconPrefix>lock_check</mat-icon>
+            <button
+              mat-icon-button
+              matIconSuffix
+              (click)="hideConfirmPassword = !hideConfirmPassword"
+              type="button"
+              tabindex="-1">
+              <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">
+              A jelszavak nem egyeznek
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Info Box -->
+          <div class="info-box">
+            <mat-icon>info</mat-icon>
+            <div class="info-content">
+              <strong>Jelszó követelmények:</strong>
+              <ul>
+                <li>Legalább 6 karakter hosszú</li>
+                <li>Az új jelszó különbözzön a régitől</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="submit-button"
+            [disabled]="passwordForm.invalid || loading">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading">save</mat-icon>
+            <span>{{ loading ? 'Módosítás...' : 'Jelszó módosítása' }}</span>
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

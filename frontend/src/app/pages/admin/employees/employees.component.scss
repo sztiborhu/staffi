@@ -1,0 +1,565 @@
+.employees-page {
+  animation: fadeIn 0.4s ease-out;
+}
+
+// Page Header
+.page-header {
+  margin-bottom: 24px;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .title-section {
+      flex: 1;
+
+      .page-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 32px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 8px 0;
+        letter-spacing: -0.5px;
+
+        .title-icon {
+          font-size: 36px;
+          width: 36px;
+          height: 36px;
+          color: #1e88e5;
+        }
+
+        @media (max-width: 640px) {
+          font-size: 28px;
+
+          .title-icon {
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
+          }
+        }
+      }
+
+      .page-subtitle {
+        font-size: 16px;
+        color: #64748b;
+        margin: 0;
+        font-weight: 400;
+        padding-left: 48px;
+
+        @media (max-width: 640px) {
+          padding-left: 0;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+
+      .refresh-button {
+        height: 44px;
+        padding: 0 20px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 8px;
+        border-color: #e2e8f0;
+        color: #475569;
+        transition: all 0.2s;
+
+        mat-icon {
+          margin-right: 8px;
+          transition: transform 0.6s ease-in-out;
+
+          &.spinning {
+            animation: spin 1s linear infinite;
+          }
+        }
+
+        &:hover:not([disabled]) {
+          background-color: #f8fafc;
+          border-color: #cbd5e1;
+        }
+
+        &[disabled] {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+          flex: 1;
+        }
+      }
+
+      .add-button {
+        height: 44px;
+        padding: 0 24px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(30, 136, 229, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        mat-icon {
+          margin-right: 8px;
+        }
+
+        &:hover {
+          box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+          transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+          flex: 1;
+        }
+      }
+    }
+  }
+}
+
+// Filter Card
+.filter-card {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  mat-card-content {
+    padding: 16px;
+
+    .filter-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 16px;
+        }
+
+        .search-field {
+          flex: 1;
+          max-width: 500px;
+          margin-bottom: 0;
+
+          @media (max-width: 768px) {
+            max-width: 100%;
+          }
+        }
+
+        .inactive-toggle {
+          flex-shrink: 0;
+
+          ::ng-deep {
+            .mdc-label {
+              font-size: 14px;
+              font-weight: 500;
+              color: #475569;
+              padding-left: 12px;
+            }
+
+            .mdc-switch {
+              .mdc-switch__track {
+                &::before {
+                  background-color: #cbd5e1;
+                }
+              }
+
+              &.mdc-switch--selected {
+                .mdc-switch__track::before {
+                  background-color: #1e88e5;
+                }
+              }
+            }
+          }
+
+          @media (max-width: 768px) {
+            justify-content: flex-start;
+          }
+        }
+      }
+
+      .search-no-results {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #94a3b8;
+        font-size: 14px;
+        padding: 8px 12px;
+        background-color: #f8fafc;
+        border-radius: 6px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .search-results-info {
+        display: flex;
+        align-items: center;
+        color: #1e88e5;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 4px 0;
+
+        span {
+          padding: 4px 12px;
+          background-color: #e3f2fd;
+          border-radius: 12px;
+        }
+      }
+    }
+  }
+}
+
+// Table Card
+.table-card {
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  gap: 24px;
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+// Error State
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  gap: 16px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #e53935;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+    max-width: 400px;
+  }
+
+  button {
+    margin-top: 16px;
+    height: 44px;
+    padding: 0 24px;
+    border-radius: 8px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: white;
+      margin-right: 8px;
+    }
+  }
+}
+
+// Empty State
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  gap: 16px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #94a3b8;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+  }
+
+  button {
+    margin-top: 16px;
+    height: 44px;
+    padding: 0 24px;
+    border-radius: 8px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: white;
+      margin-right: 8px;
+    }
+  }
+}
+
+// Table Container
+.table-container {
+  overflow-x: auto;
+
+  .employees-table {
+    width: 100%;
+    background: white;
+
+    th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 16px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 16px;
+      color: #475569;
+      font-size: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .table-row {
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #f8fafc;
+      }
+
+      // Inactive employee styling
+      &.inactive-row {
+        background-color: #d1d5db !important;
+        box-shadow: inset 4px 0 0 0 #e53935;
+
+        &:hover {
+          background-color: #b8bdc4 !important;
+        }
+
+        td {
+          color: #6b7280;
+        }
+
+        .employee-name {
+          .employee-avatar {
+            color: #9ca3af;
+          }
+
+          .full-name {
+            color: #6b7280;
+            text-decoration: line-through;
+          }
+        }
+
+        .email-link {
+          color: #6b7280;
+
+          &:hover {
+            color: #4b5563;
+          }
+        }
+      }
+    }
+
+    // Employee Name Cell
+    .employee-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .employee-avatar {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+        color: #64748b;
+      }
+
+      .name-details {
+        display: flex;
+        flex-direction: column;
+
+        .full-name {
+          font-weight: 600;
+          color: #1e293b;
+        }
+      }
+    }
+
+    // Email Link
+    .email-link {
+      color: #1e88e5;
+      text-decoration: none;
+      transition: all 0.2s;
+
+      &:hover {
+        color: #1565c0;
+        text-decoration: underline;
+      }
+    }
+
+    // Room Number
+    .room-number {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      background-color: #e3f2fd;
+      color: #1565c0;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+    }
+
+    .no-room {
+      color: #94a3b8;
+      font-style: italic;
+      font-size: 13px;
+    }
+
+    // Role Chip (kept for compatibility)
+    .role-chip {
+      background-color: #e3f2fd;
+      color: #1565c0;
+      font-size: 12px;
+      font-weight: 500;
+      height: 28px;
+      border-radius: 14px;
+    }
+
+    // Status Chip
+    .status-chip {
+      font-size: 12px;
+      font-weight: 500;
+      height: 28px;
+      border-radius: 14px;
+
+      &.status-active {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      &.status-inactive {
+        background-color: #fce4ec;
+        color: #c2185b;
+      }
+    }
+
+    // Action Buttons
+    .action-buttons {
+      display: flex;
+      gap: 4px;
+
+      button {
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Material Form Field Customization
+::ng-deep {
+  .search-field {
+    .mat-mdc-form-field-flex {
+      background-color: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      padding: 0;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 12px 0;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .table-container {
+    .employees-table {
+      th, td {
+        padding: 12px 8px;
+        font-size: 13px;
+      }
+
+      .employee-name {
+        .employee-avatar {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

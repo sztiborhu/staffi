@@ -1,0 +1,138 @@
+<!-- Mobile-First Employee Dashboard -->
+<div class="employee-dashboard">
+  <!-- Top App Bar -->
+  <mat-toolbar class="top-toolbar">
+    <div class="toolbar-content">
+      <div class="brand">
+        <mat-icon class="brand-icon">corporate_fare</mat-icon>
+        <span class="brand-name">Staffi</span>
+      </div>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <!-- User Menu -->
+  <mat-menu #userMenu="matMenu" class="user-menu">
+    <div class="user-menu-header">
+      <mat-icon class="user-avatar">account_circle</mat-icon>
+      <div class="user-info">
+        <div class="user-name">{{ userData?.lastName }} {{ userData?.firstName }}</div>
+        <div class="user-email">{{ userData?.email }}</div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="navigateTo('/employees/profile')">
+      <mat-icon>person</mat-icon>
+      <span>Profil</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Kijelentkezés</span>
+    </button>
+  </mat-menu>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Welcome Card -->
+    <mat-card class="welcome-card">
+      <mat-card-content>
+        <div class="welcome-header">
+          <div>
+            <h1 class="greeting">{{ getGreeting() }}!</h1>
+            <p class="user-name">{{ userData?.lastName }} {{ userData?.firstName }}</p>
+          </div>
+          <mat-icon class="wave-icon">waving_hand</mat-icon>
+        </div>
+        <div class="welcome-info">
+          <div class="info-item">
+            <mat-icon>business</mat-icon>
+            <span>{{ userData?.companyName || 'Nincs megadva' }}</span>
+          </div>
+          <div class="info-item" *ngIf="userData?.roomNumber">
+            <mat-icon>meeting_room</mat-icon>
+            <span>Szoba: {{ userData?.roomNumber }}</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ formatDate() }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Actions Grid -->
+    <div class="section-header">
+      <h2>Gyors műveletek</h2>
+    </div>
+
+    <div class="quick-actions-grid">
+      <mat-card
+        *ngFor="let action of quickActions"
+        class="action-card"
+        [class.primary]="action.color === 'primary'"
+        [class.accent]="action.color === 'accent'"
+        (click)="navigateTo(action.route)">
+        <mat-card-content>
+          <div class="action-icon-wrapper">
+            <mat-icon class="action-icon">{{ action.icon }}</mat-icon>
+          </div>
+          <h3 class="action-title">{{ action.title }}</h3>
+          <p class="action-description">{{ action.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Information Cards -->
+
+    <div class="info-cards">
+      <!-- Room Info Card -->
+      <mat-card class="info-card" *ngIf="userData?.roomNumber">
+        <mat-card-content>
+          <div class="card-header">
+            <mat-icon>meeting_room</mat-icon>
+            <h3>Szállás</h3>
+          </div>
+          <div class="card-body">
+            <div class="info-row">
+              <span class="label">Szobaszám:</span>
+              <span class="value">{{ userData?.roomNumber }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Cég:</span>
+              <span class="value">{{ userData?.companyName || 'N/A' }}</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button mat-stroked-button (click)="navigateTo('/employees/room')">
+              <mat-icon>arrow_forward</mat-icon>
+              Részletek
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Help Section -->
+    <mat-card class="help-card">
+      <mat-card-content>
+        <div class="help-header">
+          <mat-icon class="help-icon">help_outline</mat-icon>
+          <h3>Segítségre van szüksége?</h3>
+        </div>
+        <p class="help-text">
+          Ha kérdése van vagy problémát tapasztal, lépjen kapcsolatba a HR osztállyal.
+        </p>
+        <div class="help-actions">
+          <button mat-flat-button color="primary" class="help-button">
+            <mat-icon>email</mat-icon>
+            Kapcsolatfelvétel
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

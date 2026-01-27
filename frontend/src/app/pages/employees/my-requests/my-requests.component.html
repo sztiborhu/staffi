@@ -1,0 +1,138 @@
+<!-- Mobile-First My Requests Page -->
+<div class="my-requests-page">
+  <!-- Top Toolbar -->
+  <mat-toolbar class="top-toolbar">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">Kérelmeim</span>
+    <button mat-icon-button (click)="loadRequests()" [disabled]="loading" matTooltip="Frissítés">
+      <mat-icon [class.spinning]="loading">refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="page-content">
+    <!-- Header Card -->
+    <mat-card class="header-card">
+      <mat-card-content>
+        <div class="header-content">
+          <div class="header-text">
+            <mat-icon class="header-icon">history</mat-icon>
+            <div>
+              <h1>Előleg kérelmeim</h1>
+              <p>Az összes beküldött kérelem megtekintése</p>
+            </div>
+          </div>
+          <button mat-flat-button color="primary" (click)="newRequest()" class="new-request-button">
+            <mat-icon>add</mat-icon>
+            <span class="button-text">Új kérelem</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Kérelmek betöltése...</p>
+    </div>
+
+    <!-- Error State -->
+    <mat-card *ngIf="error && !loading" class="error-card">
+      <mat-card-content>
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <p>{{ error }}</p>
+        <button mat-flat-button color="primary" (click)="loadRequests()">
+          <mat-icon>refresh</mat-icon>
+          Újrapróbálás
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Empty State -->
+    <mat-card *ngIf="!loading && !error && requests.length === 0" class="empty-card">
+      <mat-card-content>
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <h3>Még nincs kérelem</h3>
+        <p>Még nem küldött be előleg kérelmet. Kattintson az alábbi gombra új kérelem létrehozásához.</p>
+        <button mat-flat-button color="primary" (click)="newRequest()">
+          <mat-icon>add</mat-icon>
+          Új előleg kérelem
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Requests List -->
+    <div *ngIf="!loading && !error && requests.length > 0" class="requests-list">
+      <mat-card *ngFor="let request of requests" class="request-card">
+        <mat-card-content>
+          <!-- Request Header -->
+          <div class="request-header">
+            <div class="request-info">
+              <div class="amount">{{ formatCurrency(request.amount) }}</div>
+              <div class="date">
+                <mat-icon>calendar_today</mat-icon>
+                {{ formatDate(request.requestDate) }}
+              </div>
+            </div>
+            <mat-chip
+              [class]="getStatusColor(request.status)"
+              class="status-chip">
+              <mat-icon>{{ getStatusIcon(request.status) }}</mat-icon>
+              {{ getStatusText(request.status) }}
+            </mat-chip>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Request Details -->
+          <div class="request-details">
+            <div class="detail-row">
+              <span class="label">
+                <mat-icon>description</mat-icon>
+                Indoklás:
+              </span>
+              <span class="value">{{ request.reason }}</span>
+            </div>
+
+            <!-- Reviewed Info (if applicable) -->
+            <div *ngIf="request.status !== 'PENDING' && request.reviewedByName" class="review-section">
+              <mat-divider></mat-divider>
+              <div class="detail-row">
+                <span class="label">
+                  <mat-icon>person</mat-icon>
+                  Elbírálta:
+                </span>
+                <span class="value">{{ request.reviewedByName }}</span>
+              </div>
+              <div class="detail-row" *ngIf="request.reviewedAt">
+                <span class="label">
+                  <mat-icon>access_time</mat-icon>
+                  Elbírálás dátuma:
+                </span>
+                <span class="value">{{ formatDate(request.reviewedAt) }}</span>
+              </div>
+
+              <!-- Rejection Reason -->
+              <div *ngIf="request.status === 'REJECTED' && request.rejectionReason" class="rejection-reason">
+                <mat-icon>info</mat-icon>
+                <div>
+                  <strong>Elutasítás oka:</strong>
+                  <p>{{ request.rejectionReason }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Info -->
+            <div *ngIf="request.status === 'PENDING'" class="pending-info">
+              <mat-icon>schedule</mat-icon>
+              <span>A kérelmet hamarosan elbírálják</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

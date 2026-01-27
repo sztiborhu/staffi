@@ -1,0 +1,133 @@
+<!-- Mobile-First Advance Request Page -->
+<div class="advance-request-page">
+  <!-- Top Toolbar -->
+  <mat-toolbar class="top-toolbar">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">Előleg kérelem</span>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="page-content">
+    <!-- Header Card -->
+    <mat-card class="header-card">
+      <mat-card-content>
+        <div class="header-content">
+          <mat-icon class="header-icon">request_quote</mat-icon>
+          <div class="header-text">
+            <h1>Új előleg kérelem</h1>
+            <p>Töltse ki az alábbi űrlapot az előleg igényléséhez</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Request Form Card -->
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="advanceForm" (ngSubmit)="onSubmit()">
+          <!-- Amount Field -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Összeg (HUF)</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="amount"
+              placeholder="50000">
+            <mat-icon matIconPrefix>payments</mat-icon>
+            <span matTextSuffix>Ft</span>
+            <mat-error *ngIf="advanceForm.get('amount')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="advanceForm.get('amount')?.hasError('min')">
+              Az összeg legalább 1 Ft kell legyen
+            </mat-error>
+            <mat-hint>Adja meg az igényelt előleg összegét</mat-hint>
+          </mat-form-field>
+
+          <!-- Reason Field -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Indoklás</mat-label>
+            <textarea
+              matInput
+              formControlName="reason"
+              rows="5"
+              placeholder="Kérem adja meg az előleg kérelem részletes indoklását..."></textarea>
+            <mat-icon matIconPrefix>description</mat-icon>
+            <mat-error *ngIf="advanceForm.get('reason')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="advanceForm.get('reason')?.hasError('minlength')">
+              Legalább 10 karakter szükséges
+            </mat-error>
+            <mat-error *ngIf="advanceForm.get('reason')?.hasError('maxlength')">
+              Maximum 500 karakter
+            </mat-error>
+            <mat-hint align="end">
+              {{ advanceForm.get('reason')?.value?.length || 0 }} / 500
+            </mat-hint>
+          </mat-form-field>
+
+          <!-- Info Box -->
+          <div class="info-box">
+            <mat-icon>info</mat-icon>
+            <div class="info-content">
+              <strong>Fontos tudnivalók:</strong>
+              <ul>
+                <li>Az előleg kérelmét a HR osztály bírálja el</li>
+                <li>Az elbírálás 1-3 munkanapon belül megtörténik</li>
+                <li>Az eredményről email értesítést kap</li>
+                <li>Kérelmét a "Kérelmeim" menüpontban követheti nyomon</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="goBack()"
+              class="cancel-button"
+              [disabled]="submitting">
+              <mat-icon>close</mat-icon>
+              Mégse
+            </button>
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="submit"
+              class="submit-button"
+              [disabled]="submitting || advanceForm.invalid">
+              <mat-spinner
+                *ngIf="submitting"
+                diameter="20"
+                class="button-spinner"></mat-spinner>
+              <mat-icon *ngIf="!submitting">send</mat-icon>
+              <span>{{ submitting ? 'Küldés...' : 'Kérelem beküldése' }}</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Help Card -->
+    <mat-card class="help-card">
+      <mat-card-content>
+        <div class="help-header">
+          <mat-icon>help_outline</mat-icon>
+          <h3>Kérdése van?</h3>
+        </div>
+        <p>Ha kérdése van az előleg kérelemmel kapcsolatban, forduljon bizalommal a HR osztályhoz.</p>
+        <button mat-stroked-button class="contact-button">
+          <mat-icon>email</mat-icon>
+          HR kapcsolat
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

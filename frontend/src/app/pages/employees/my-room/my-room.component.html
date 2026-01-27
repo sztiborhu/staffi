@@ -1,0 +1,174 @@
+<!-- Mobile-First My Room Page -->
+<div class="my-room-page">
+  <!-- Top Toolbar -->
+  <mat-toolbar class="top-toolbar">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">Szobám</span>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="page-content">
+    <!-- Loading State -->
+    <mat-card *ngIf="loading" class="loading-card">
+      <mat-card-content>
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Szoba adatok betöltése...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- No Room Assigned State -->
+    <mat-card *ngIf="!loading && noRoom" class="empty-card">
+      <mat-card-content>
+        <div class="empty-container">
+          <mat-icon class="empty-icon">meeting_room_outlined</mat-icon>
+          <h2>Nincs hozzárendelt szoba</h2>
+          <p>Jelenleg nincs Önhöz szoba rendelve. Kérjük, vegye fel a kapcsolatot a HR osztállyal.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Room Info Content -->
+    <ng-container *ngIf="!loading && !noRoom && roomInfo">
+      <!-- Header Card -->
+      <mat-card class="header-card">
+        <mat-card-content>
+          <div class="header-content">
+            <mat-icon class="header-icon">meeting_room</mat-icon>
+            <div class="header-text">
+              <h1>{{ roomInfo.roomNumber }}</h1>
+              <p>{{ roomInfo.accommodationName }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Accommodation Info Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>apartment</mat-icon>
+            <span>Szálláshely információk</span>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-section">
+            <div class="info-grid">
+              <div class="info-item full-width">
+                <span class="label">Szálláshely neve</span>
+                <span class="value">{{ roomInfo.accommodationName }}</span>
+              </div>
+              <div class="info-item full-width">
+                <span class="label">Cím</span>
+                <span class="value">{{ roomInfo.accommodationAddress }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Szobaszám</span>
+                <span class="value room-number-badge">{{ roomInfo.roomNumber }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Beköltözés dátuma</span>
+                <span class="value">{{ formatDate(roomInfo.checkInDate) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-section">
+            <h4 class="section-label">
+              <mat-icon>analytics</mat-icon>
+              Kihasználtság
+            </h4>
+            <div class="occupancy-info">
+              <div class="occupancy-stats">
+                <div class="stat-item">
+                  <mat-icon>people</mat-icon>
+                  <div class="stat-content">
+                    <span class="stat-value">{{ roomInfo.occupants.length }} / {{ roomInfo.roomCapacity }}</span>
+                    <span class="stat-label">Lakók</span>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <mat-icon [style.color]="getOccupancyColor()">donut_large</mat-icon>
+                  <div class="stat-content">
+                    <span class="stat-value" [style.color]="getOccupancyColor()">{{ getOccupancyPercentage() }}%</span>
+                    <span class="stat-label">Kihasználtság</span>
+                  </div>
+                </div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill"
+                     [style.width.%]="getOccupancyPercentage()"
+                     [style.background-color]="getOccupancyColor()">
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Roommates Card -->
+      <mat-card class="roommates-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>group</mat-icon>
+            <span>Lakók ({{ roomInfo.occupants.length }})</span>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="roommates-list">
+            <div *ngFor="let occupant of roomInfo.occupants; let i = index" class="roommate-item">
+              <div class="roommate-avatar">
+                <mat-icon>account_circle</mat-icon>
+              </div>
+              <div class="roommate-info">
+                <h3 class="roommate-name">{{ occupant.name }}</h3>
+                <div class="roommate-contact">
+                  <div class="contact-item">
+                    <mat-icon>email</mat-icon>
+                    <a [href]="'mailto:' + occupant.email">{{ occupant.email }}</a>
+                  </div>
+                  <div class="contact-item">
+                    <mat-icon>phone</mat-icon>
+                    <a [href]="'tel:' + occupant.phoneNumber">{{ occupant.phoneNumber }}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty slots -->
+            <div *ngFor="let slot of [].constructor(roomInfo.roomCapacity - roomInfo.occupants.length); let i = index"
+                 class="roommate-item empty-slot">
+              <div class="roommate-avatar empty">
+                <mat-icon>person_add_disabled</mat-icon>
+              </div>
+              <div class="roommate-info">
+                <h3 class="roommate-name">Üres hely</h3>
+                <p class="empty-text">Ez a férőhely jelenleg nem foglalt</p>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Info Box -->
+      <div class="info-box">
+        <mat-icon>info</mat-icon>
+        <div class="info-content">
+          <strong>Fontos tudnivalók:</strong>
+          <ul>
+            <li>A szobatársak elérhetőségi adatai csak tájékoztató jellegűek</li>
+            <li>Kérdés esetén forduljon a szálláshely menedzseréhez</li>
+            <li>A szoba kihasználtsága folyamatosan frissül</li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+

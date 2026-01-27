@@ -1,0 +1,188 @@
+<!-- Advance Management Page -->
+<div class="advances-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title">
+          <mat-icon>request_quote</mat-icon>
+          Előleg kérelmek
+        </h1>
+        <p class="page-subtitle">Az összes alkalmazotti előleg kérelem kezelése</p>
+      </div>
+      <button
+        mat-stroked-button
+        class="refresh-button"
+        (click)="loadAdvances()"
+        [disabled]="loading">
+        <mat-icon [class.spinning]="loading">refresh</mat-icon>
+        <span>Frissítés</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Kérelmek betöltése...</p>
+  </div>
+
+  <!-- Error State -->
+  <mat-card *ngIf="error && !loading" class="error-card">
+    <mat-card-content>
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-flat-button color="primary" (click)="loadAdvances()">
+        <mat-icon>refresh</mat-icon>
+        Újrapróbálás
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error" class="content-wrapper">
+    <!-- Tabs -->
+    <mat-card class="tabs-card">
+      <mat-tab-group
+        [(selectedIndex)]="selectedTab"
+        (selectedIndexChange)="onTabChange($event)"
+        animationDuration="300ms">
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="tab-label">
+              <mat-icon>list</mat-icon>
+              Összes
+              <span class="tab-badge">{{ allAdvances.length }}</span>
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="tab-label">
+              <mat-icon>schedule</mat-icon>
+              Folyamatban
+              <span class="tab-badge pending" *ngIf="pendingCount > 0">{{ pendingCount }}</span>
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="tab-label">
+              <mat-icon>check_circle</mat-icon>
+              Jóváhagyva
+              <span class="tab-badge approved" *ngIf="approvedCount > 0">{{ approvedCount }}</span>
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="tab-label">
+              <mat-icon>cancel</mat-icon>
+              Elutasítva
+              <span class="tab-badge rejected" *ngIf="rejectedCount > 0">{{ rejectedCount }}</span>
+            </span>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+
+    <!-- Empty State -->
+    <mat-card *ngIf="filteredAdvances.length === 0" class="empty-card">
+      <mat-card-content>
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <h3>Nincs megjeleníthető kérelem</h3>
+        <p>Ebben a kategóriában jelenleg nincsenek előleg kérelmek.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Table -->
+    <mat-card *ngIf="filteredAdvances.length > 0" class="table-card">
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredAdvances" class="advances-table">
+
+          <!-- Employee Name Column -->
+          <ng-container matColumnDef="employeeName">
+            <th mat-header-cell *matHeaderCellDef>Alkalmazott</th>
+            <td mat-cell *matCellDef="let advance">
+              <div class="employee-cell">
+                <div class="employee-name">{{ advance.employeeName }}</div>
+                <div class="employee-email">{{ advance.employeeEmail }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Összeg</th>
+            <td mat-cell *matCellDef="let advance">
+              <div class="amount-cell">{{ formatCurrency(advance.amount) }}</div>
+            </td>
+          </ng-container>
+
+          <!-- Request Date Column -->
+          <ng-container matColumnDef="requestDate">
+            <th mat-header-cell *matHeaderCellDef>Kérelem dátuma</th>
+            <td mat-cell *matCellDef="let advance">
+              <div class="date-cell">
+                <mat-icon>calendar_today</mat-icon>
+                {{ formatDate(advance.requestDate) }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Státusz</th>
+            <td mat-cell *matCellDef="let advance">
+              <mat-chip [class]="getStatusColor(advance.status)" class="status-chip">
+                <mat-icon>{{ getStatusIcon(advance.status) }}</mat-icon>
+                {{ getStatusText(advance.status) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Műveletek</th>
+            <td mat-cell *matCellDef="let advance">
+              <div class="action-buttons">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Részletek"
+                  (click)="openReviewDialog(advance)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+
+                <ng-container *ngIf="advance.status === 'PENDING'">
+                  <button
+                    mat-icon-button
+                    class="approve-button"
+                    matTooltip="Gyors jóváhagyás"
+                    (click)="quickApprove(advance, $event)">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    class="reject-button"
+                    matTooltip="Elutasítás"
+                    (click)="quickReject(advance, $event)">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+        </table>
+      </div>
+    </mat-card>
+  </div>
+</div>
+

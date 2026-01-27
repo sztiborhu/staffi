@@ -1,0 +1,319 @@
+// Contracts Dialog - Following Design System
+.contracts-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+// Dialog Header
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      color: #1e88e5;
+    }
+  }
+
+  .close-button mat-icon {
+    color: #64748b;
+  }
+}
+
+// Dialog Content
+.dialog-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+// Header Actions
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+
+  button {
+    border-radius: 8px;
+    font-weight: 500;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    &.spinning mat-icon {
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+
+  p {
+    color: #64748b;
+    font-size: 14px;
+  }
+}
+
+// Error State
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 12px;
+
+  .error-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #ef4444;
+  }
+
+  p {
+    color: #991b1b;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  button mat-icon {
+    margin-right: 8px;
+  }
+}
+
+// Empty State
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #cbd5e1;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 20px 0;
+  }
+
+  button mat-icon {
+    margin-right: 8px;
+  }
+}
+
+// Table Container
+.table-container {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+// Contracts Table
+.contracts-table {
+  width: 100%;
+  min-width: 900px;
+
+  th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #1e293b;
+    font-size: 14px;
+  }
+
+  .table-row {
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f8fafc;
+    }
+  }
+
+  // Contract Number Cell
+  .contract-number {
+    font-weight: 600;
+    color: #1e88e5;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .contract-created {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  // Dates Cell
+  .dates-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+
+      mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        color: #64748b;
+      }
+    }
+
+    .date-separator {
+      font-size: 12px;
+      color: #cbd5e1;
+      padding-left: 18px;
+    }
+  }
+
+  // Rate Cell
+  .rate-cell {
+    font-size: 16px;
+    font-weight: 700;
+    color: #10b981;
+  }
+
+  // Hours Cell
+  .hours-cell {
+    font-size: 14px;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  // Status Chip
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 600;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+
+    &.active {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    &.terminated {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    &.expired {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    &.draft {
+      background-color: #e0e7ff;
+      color: #3730a3;
+    }
+  }
+
+  // Action Buttons
+  .action-buttons {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    button {
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .dialog-header {
+    padding: 16px;
+
+    h2 {
+      font-size: 18px;
+    }
+  }
+
+  .dialog-content {
+    padding: 16px;
+  }
+
+  .header-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .table-container {
+    box-shadow: inset -1px 0 0 #e2e8f0;
+  }
+}
+

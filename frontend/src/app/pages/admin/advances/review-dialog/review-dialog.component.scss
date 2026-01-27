@@ -1,0 +1,355 @@
+// Review Dialog - Following Design System
+.review-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+// Dialog Header
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      color: #1e88e5;
+    }
+  }
+
+  .close-button {
+    mat-icon {
+      color: #64748b;
+    }
+  }
+}
+
+// Dialog Content
+.dialog-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+
+  mat-divider {
+    margin: 20px 0;
+  }
+}
+
+// Request Details
+.request-details {
+  .detail-section {
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0 0 16px 0;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 12px;
+
+      .label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 500;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      .value {
+        color: #1e293b;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: right;
+      }
+    }
+
+    .amount-display {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1e88e5;
+      margin-bottom: 16px;
+      text-align: center;
+      padding: 16px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-radius: 8px;
+    }
+
+    .reason-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      color: #1e293b;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+
+      &.pending {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+
+      &.approved {
+        background-color: #d1fae5;
+        color: #065f46;
+      }
+
+      &.rejected {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+    }
+  }
+
+  .review-info {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+
+    .rejection-display {
+      margin-top: 12px;
+      padding: 12px;
+      background: #fee2e2;
+      border-left: 4px solid #ef4444;
+      border-radius: 4px;
+
+      strong {
+        display: block;
+        color: #991b1b;
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      p {
+        color: #7f1d1d;
+        font-size: 13px;
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// Review Form
+.review-form {
+  margin-top: 20px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 20px 0 16px 0;
+  }
+
+  .decision-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    ::ng-deep .mat-mdc-radio-button {
+      .mdc-radio {
+        padding: 0;
+      }
+
+      .mdc-label {
+        padding-left: 12px;
+      }
+    }
+
+    .approve-option,
+    .reject-option {
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.2s;
+
+      .radio-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+
+        span {
+          font-size: 15px;
+          font-weight: 500;
+        }
+      }
+
+      &:hover {
+        background-color: #f8fafc;
+      }
+
+      &.mat-mdc-radio-checked {
+        border-color: currentColor;
+        background-color: rgba(30, 136, 229, 0.05);
+      }
+    }
+
+    .approve-option {
+      mat-icon {
+        color: #10b981;
+      }
+
+      &.mat-mdc-radio-checked {
+        border-color: #10b981;
+        background-color: #d1fae5;
+      }
+    }
+
+    .reject-option {
+      mat-icon {
+        color: #ef4444;
+      }
+
+      &.mat-mdc-radio-checked {
+        border-color: #ef4444;
+        background-color: #fee2e2;
+      }
+    }
+  }
+
+  .rejection-field {
+    width: 100%;
+
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        background-color: #fef2f2;
+      }
+
+      textarea {
+        line-height: 1.6;
+      }
+
+      .mat-mdc-form-field-icon-prefix {
+        color: #ef4444;
+      }
+    }
+  }
+}
+
+// Dialog Actions
+.dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  button {
+    border-radius: 8px;
+    height: 44px;
+    font-weight: 500;
+
+    mat-icon {
+      margin-right: 8px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  mat-stroked-button {
+    border-color: #e2e8f0;
+    color: #475569;
+
+    &:hover {
+      background-color: #f8fafc;
+      border-color: #cbd5e1;
+    }
+  }
+
+  mat-flat-button {
+    box-shadow: 0 1px 3px rgba(30, 136, 229, 0.2);
+
+    &:hover:not([disabled]) {
+      box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .dialog-header {
+    padding: 16px;
+
+    h2 {
+      font-size: 18px;
+    }
+  }
+
+  .dialog-content {
+    padding: 16px;
+  }
+
+  .dialog-actions {
+    padding: 12px 16px;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .request-details .detail-section {
+    .detail-row {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .value {
+        text-align: left;
+      }
+    }
+
+    .amount-display {
+      font-size: 28px;
+    }
+  }
+}
+

@@ -1,0 +1,151 @@
+<div class="dialog-container">
+  <!-- Dialog Header -->
+  <div mat-dialog-title class="dialog-header">
+    <div class="header-content">
+      <mat-icon class="employee-icon">account_circle</mat-icon>
+      <div class="header-text">
+        <h2>{{ employee.lastName }} {{ employee.firstName }}</h2>
+      </div>
+    </div>
+    <button mat-icon-button (click)="close()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Dialog Content -->
+  <div mat-dialog-content class="dialog-content">
+
+    <!-- Status Badge -->
+    <div class="status-section">
+      <mat-chip [class]="getStatusClass()" class="status-chip">
+        <mat-icon>{{ employee.isActive ? 'check_circle' : 'cancel' }}</mat-icon>
+        {{ getStatusText() }}
+      </mat-chip>
+    </div>
+
+    <!-- Personal Information Section -->
+    <div class="info-section">
+      <h3 class="section-title">
+        <mat-icon>person</mat-icon>
+        Személyes adatok
+      </h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Teljes név</span>
+          <span class="info-value">{{ employee.lastName }} {{ employee.firstName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Email cím</span>
+          <span class="info-value">
+            <a [href]="'mailto:' + employee.email" class="email-link">{{ employee.email }}</a>
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Telefonszám</span>
+          <span class="info-value">{{ employee.phoneNumber }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Születési dátum</span>
+          <span class="info-value">{{ formatDate(employee.birthDate) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Állampolgárság</span>
+          <span class="info-value">{{ employee.nationality }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Lakcím</span>
+          <span class="info-value">{{ employee.primaryAddress }}</span>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Employment Information Section -->
+    <div class="info-section">
+      <h3 class="section-title">
+        <mat-icon>work</mat-icon>
+        Munkaviszony adatok
+      </h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Cég</span>
+          <span class="info-value">{{ employee.companyName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Munkakezdés dátuma</span>
+          <span class="info-value">{{ formatDate(employee.startDate) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Szobaszám</span>
+          <span class="info-value">
+            <span *ngIf="employee.roomNumber" class="room-badge">{{ employee.roomNumber }}</span>
+            <span *ngIf="!employee.roomNumber" class="no-data">Nincs megadva</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Official Documents Section -->
+    <div class="info-section">
+      <h3 class="section-title">
+        <mat-icon>description</mat-icon>
+        Hivatalos dokumentumok
+      </h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Adóazonosító jel</span>
+          <span class="info-value">{{ employee.taxId }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">TAJ szám</span>
+          <span class="info-value">{{ employee.tajNumber }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Személyi igazolvány szám</span>
+          <span class="info-value">{{ employee.idCardNumber }}</span>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- System Information Section -->
+    <div class="info-section">
+      <h3 class="section-title">
+        <mat-icon>info</mat-icon>
+        Rendszer információk
+      </h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Alkalmazott ID</span>
+          <span class="info-value">#{{ employee.id }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Felhasználó ID</span>
+          <span class="info-value">#{{ employee.userId }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Dialog Actions -->
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="close()" class="cancel-button">
+      Bezárás
+    </button>
+    <button mat-button color="accent" class="history-button" (click)="viewRoomHistory()">
+      <mat-icon>history</mat-icon>
+      Szoba Előzmények
+    </button>
+    <button mat-flat-button color="primary" class="edit-button" (click)="openEdit()">
+      <mat-icon>edit</mat-icon>
+      Szerkesztés
+    </button>
+  </div>
+</div>>
+
+

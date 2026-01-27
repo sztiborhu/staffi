@@ -1,0 +1,67 @@
+<div class="room-history-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>history</mat-icon>
+    Szoba Előzmények - {{ data.employeeName }}
+  </h2>
+
+  <mat-dialog-content>
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Előzmények betöltése...</p>
+    </div>
+
+    <div *ngIf="!loading && roomHistory.length === 0" class="empty-state">
+      <mat-icon>room_preferences</mat-icon>
+      <p>Nincs szoba előzmény ehhez a dolgozóhoz.</p>
+    </div>
+
+    <div *ngIf="!loading && roomHistory.length > 0" class="history-table">
+      <table mat-table [dataSource]="roomHistory" class="full-width-table">
+        <!-- Room Number Column -->
+        <ng-container matColumnDef="roomNumber">
+          <th mat-header-cell *matHeaderCellDef>Szobaszám</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="room-cell">
+              <mat-icon class="room-icon">room</mat-icon>
+              <span class="room-number">{{ item.roomNumber }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Check-in Date Column -->
+        <ng-container matColumnDef="checkInDate">
+          <th mat-header-cell *matHeaderCellDef>Bejelentkezés</th>
+          <td mat-cell *matCellDef="let item">
+            {{ formatDate(item.checkInDate) }}
+          </td>
+        </ng-container>
+
+        <!-- Check-out Date Column -->
+        <ng-container matColumnDef="checkOutDate">
+          <th mat-header-cell *matHeaderCellDef>Kijelentkezés</th>
+          <td mat-cell *matCellDef="let item">
+            {{ formatDate(item.checkOutDate) }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Státusz</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [class]="item.status === 'ACTIVE' ? 'active' : 'checked-out'">
+              {{ item.status === 'ACTIVE' ? 'Aktív' : 'Kijelentkezve' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Bezárás</button>
+  </mat-dialog-actions>
+</div>
+

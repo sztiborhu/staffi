@@ -1,0 +1,139 @@
+<!-- Create Contract Dialog -->
+<div class="create-contract-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <mat-icon>add_circle</mat-icon>
+      Új szerződés létrehozása
+    </h2>
+    <button mat-icon-button (click)="onCancel()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <!-- Employee Info -->
+    <div class="employee-info">
+      <mat-icon>person</mat-icon>
+      <div>
+        <div class="employee-name">{{ data.employeeName }}</div>
+        <div class="employee-label">Alkalmazott</div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
+      <!-- Start Date -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Kezdés dátuma</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startPicker"
+          formControlName="startDate"
+          placeholder="Válasszon dátumot">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        <mat-icon matIconPrefix>event</mat-icon>
+        <mat-error *ngIf="contractForm.get('startDate')?.hasError('required')">
+          Kötelező mező
+        </mat-error>
+        <mat-hint>A szerződés érvényességének kezdő dátuma</mat-hint>
+      </mat-form-field>
+
+      <!-- End Date -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Végdátum (opcionális)</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endPicker"
+          formControlName="endDate"
+          placeholder="Határozatlan időre">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+        <mat-icon matIconPrefix>event_busy</mat-icon>
+        <mat-error *ngIf="contractForm.hasError('dateRangeInvalid')">
+          A végdátum nem lehet korábbi a kezdési dátumnál
+        </mat-error>
+        <mat-hint>Hagyja üresen határozatlan időtartamhoz</mat-hint>
+      </mat-form-field>
+
+      <!-- Hourly Rate -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Óradíj</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="hourlyRate"
+          placeholder="3500">
+        <mat-icon matIconPrefix>payments</mat-icon>
+        <span matTextSuffix>Ft</span>
+        <mat-error *ngIf="contractForm.get('hourlyRate')?.hasError('required')">
+          Kötelező mező
+        </mat-error>
+        <mat-error *ngIf="contractForm.get('hourlyRate')?.hasError('min')">
+          Az óradíjnak nagyobbnak kell lennie 0-nál
+        </mat-error>
+        <mat-hint>Bruttó órabér forintban</mat-hint>
+      </mat-form-field>
+
+      <!-- Working Hours Per Week -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Heti munkaórák</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="workingHoursPerWeek"
+          placeholder="40">
+        <mat-icon matIconPrefix>schedule</mat-icon>
+        <span matTextSuffix>óra/hét</span>
+        <mat-error *ngIf="contractForm.get('workingHoursPerWeek')?.hasError('required')">
+          Kötelező mező
+        </mat-error>
+        <mat-error *ngIf="contractForm.get('workingHoursPerWeek')?.hasError('min')">
+          Legalább 1 óra szükséges
+        </mat-error>
+        <mat-error *ngIf="contractForm.get('workingHoursPerWeek')?.hasError('max')">
+          Maximum 168 óra hetente
+        </mat-error>
+        <mat-hint>Standard: 40 óra/hét</mat-hint>
+      </mat-form-field>
+
+      <!-- Info Box -->
+      <div class="info-box">
+        <mat-icon>info</mat-icon>
+        <div>
+          <strong>Fontos tudnivalók:</strong>
+          <ul>
+            <li>A szerződés automatikusan "Aktív" státuszra kerül</li>
+            <li>PDF dokumentum automatikusan generálódik</li>
+            <li>Egyedi szerződésszám kerül kiosztásra</li>
+            <li>A létrehozás után azonnal letölthető a PDF</li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button
+      mat-stroked-button
+      (click)="onCancel()"
+      [disabled]="submitting">
+      <mat-icon>close</mat-icon>
+      Mégse
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="submitting || contractForm.invalid">
+      <mat-spinner
+        *ngIf="submitting"
+        diameter="20"
+        class="button-spinner"></mat-spinner>
+      <mat-icon *ngIf="!submitting">check</mat-icon>
+      <span>{{ submitting ? 'Létrehozás...' : 'Szerződés létrehozása' }}</span>
+    </button>
+  </mat-dialog-actions>
+</div>
+

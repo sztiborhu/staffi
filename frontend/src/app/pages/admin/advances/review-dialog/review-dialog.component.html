@@ -1,0 +1,143 @@
+<!-- Review Dialog -->
+<div class="review-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <mat-icon>rate_review</mat-icon>
+      Előleg kérelem elbírálása
+    </h2>
+    <button mat-icon-button (click)="onCancel()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <!-- Request Details -->
+    <div class="request-details">
+      <div class="detail-section">
+        <h3>Kérelmező adatai</h3>
+        <div class="detail-row">
+          <span class="label">Név:</span>
+          <span class="value">{{ data.employeeName }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Email:</span>
+          <span class="value">{{ data.employeeEmail }}</span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="detail-section">
+        <h3>Kérelem részletei</h3>
+        <div class="amount-display">
+          {{ formatCurrency(data.amount) }}
+        </div>
+        <div class="detail-row">
+          <span class="label">
+            <mat-icon>calendar_today</mat-icon>
+            Kérelem dátuma:
+          </span>
+          <span class="value">{{ formatDate(data.requestDate) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">
+            <mat-icon>description</mat-icon>
+            Indoklás:
+          </span>
+        </div>
+        <div class="reason-box">
+          {{ data.reason }}
+        </div>
+        <div class="detail-row">
+          <span class="label">Státusz:</span>
+          <mat-chip [class]="getStatusColor(data.status)" class="status-chip">
+            {{ getStatusText(data.status) }}
+          </mat-chip>
+        </div>
+      </div>
+
+      <!-- Existing Review Info -->
+      <div *ngIf="data.status !== 'PENDING' && data.reviewedByName" class="detail-section review-info">
+        <mat-divider></mat-divider>
+        <h3>Elbírálás információk</h3>
+        <div class="detail-row">
+          <span class="label">Elbírálta:</span>
+          <span class="value">{{ data.reviewedByName }}</span>
+        </div>
+        <div class="detail-row" *ngIf="data.reviewedAt">
+          <span class="label">Elbírálás dátuma:</span>
+          <span class="value">{{ formatDate(data.reviewedAt) }}</span>
+        </div>
+        <div *ngIf="data.status === 'REJECTED' && data.rejectionReason" class="rejection-display">
+          <strong>Elutasítás oka:</strong>
+          <p>{{ data.rejectionReason }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Form (only if pending or can change decision) -->
+    <div *ngIf="data.status === 'PENDING'" class="review-form">
+      <mat-divider></mat-divider>
+
+      <form [formGroup]="reviewForm">
+        <h3>Elbírálás</h3>
+
+        <mat-radio-group formControlName="decision" class="decision-group">
+          <mat-radio-button value="APPROVED" class="approve-option">
+            <div class="radio-content">
+              <mat-icon>check_circle</mat-icon>
+              <span>Jóváhagyom</span>
+            </div>
+          </mat-radio-button>
+          <mat-radio-button value="REJECTED" class="reject-option">
+            <div class="radio-content">
+              <mat-icon>cancel</mat-icon>
+              <span>Elutasítom</span>
+            </div>
+          </mat-radio-button>
+        </mat-radio-group>
+
+        <!-- Rejection Reason -->
+        <mat-form-field
+          *ngIf="reviewForm.get('decision')?.value === 'REJECTED'"
+          appearance="outline"
+          class="rejection-field">
+          <mat-label>Elutasítás indoklása</mat-label>
+          <textarea
+            matInput
+            formControlName="rejectionReason"
+            rows="4"
+            placeholder="Kérem adja meg az elutasítás okát..."></textarea>
+          <mat-icon matIconPrefix>info</mat-icon>
+          <mat-error *ngIf="reviewForm.get('rejectionReason')?.hasError('required')">
+            Az elutasítás indoklása kötelező
+          </mat-error>
+          <mat-error *ngIf="reviewForm.get('rejectionReason')?.hasError('minlength')">
+            Legalább 10 karakter szükséges
+          </mat-error>
+          <mat-hint align="end">
+            {{ reviewForm.get('rejectionReason')?.value?.length || 0 }} karakter
+          </mat-hint>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-stroked-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+      Mégse
+    </button>
+
+    <button
+      *ngIf="data.status === 'PENDING'"
+      mat-flat-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="reviewForm.invalid">
+      <mat-icon>check</mat-icon>
+      Elbírálás mentése
+    </button>
+  </mat-dialog-actions>
+</div>
+

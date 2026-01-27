@@ -1,0 +1,97 @@
+<div class="login-wrapper">
+  <div class="login-container">
+    <!-- Left Side - Branding -->
+    <div class="branding-section">
+      <div class="branding-content">
+        <mat-icon class="brand-icon">corporate_fare</mat-icon>
+        <h1 class="brand-title">Staffi</h1>
+        <p class="brand-description">
+          Minden egy helyen: Munka. Szállás. Pénzügy
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Könnyű munkavállaló kezelés</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Előlegkezelés</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Szállásmenedzsment</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h2 class="form-title">Bejelentkezés</h2>
+          <p class="form-subtitle">Lépj be a fiókodba</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <mat-form-field appearance="outline" class="custom-field">
+            <mat-label>E-mail cím</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="Add meg az e-mail címed"
+              autocomplete="email"
+            />
+            <mat-icon matIconPrefix>person_outline</mat-icon>
+            <mat-error *ngIf="loginForm.get('email')?.invalid">
+              {{ getEmailErrorMessage() }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="custom-field">
+            <mat-label>Jelszó</mat-label>
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Add meg a jelszavad"
+              autocomplete="current-password"
+            />
+            <mat-icon matIconPrefix>lock_outline</mat-icon>
+            <button
+              mat-icon-button
+              matIconSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              tabindex="-1"
+            >
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.invalid">
+              {{ getPasswordErrorMessage() }}
+            </mat-error>
+          </mat-form-field>
+
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="submit-button"
+            [disabled]="loginForm.invalid"
+          >
+            <span>Bejelentkezés</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </form>
+        <!--
+        <div class="form-footer">
+          <p>Nincs fiókod? <a routerLink="/register" class="register-link">Regisztrálj</a></p>
+        </div>
+        -->
+      </div>
+    </div>
+  </div>
+</div>
+

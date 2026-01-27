@@ -1,0 +1,203 @@
+<div class="dialog-container">
+  <!-- Dialog Header -->
+  <div mat-dialog-title class="dialog-header">
+    <div class="header-content">
+      <mat-icon class="employee-icon">person_add</mat-icon>
+      <div class="header-text">
+        <h2>Új alkalmazott hozzáadása</h2>
+        <span class="employee-name">Töltse ki az alábbi mezőket</span>
+      </div>
+    </div>
+    <button mat-icon-button (click)="close()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Dialog Content -->
+  <div mat-dialog-content class="dialog-content">
+    <form [formGroup]="addForm" class="add-form">
+
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>person</mat-icon>
+          Személyes adatok
+        </h3>
+
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Vezetéknév</mat-label>
+            <input matInput formControlName="lastName" required>
+            <mat-icon matIconPrefix>person</mat-icon>
+            <mat-error *ngIf="addForm.get('lastName')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Keresztnév</mat-label>
+            <input matInput formControlName="firstName" required>
+            <mat-icon matIconPrefix>person</mat-icon>
+            <mat-error *ngIf="addForm.get('firstName')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Email cím</mat-label>
+            <input matInput type="email" formControlName="email" required>
+            <mat-icon matIconPrefix>email</mat-icon>
+            <mat-error *ngIf="addForm.get('email')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="addForm.get('email')?.hasError('email')">
+              Érvénytelen email cím
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Jelszó</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+            <mat-icon matIconPrefix>lock</mat-icon>
+            <button mat-icon-button matIconSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="addForm.get('password')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+            <mat-error *ngIf="addForm.get('password')?.hasError('minlength')">
+              Minimum 8 karakter szükséges
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Telefonszám</mat-label>
+            <input matInput formControlName="phoneNumber" required>
+            <mat-icon matIconPrefix>phone</mat-icon>
+            <mat-error *ngIf="addForm.get('phoneNumber')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Születési dátum</mat-label>
+            <input matInput type="date" formControlName="birthDate" required>
+            <mat-icon matIconPrefix>cake</mat-icon>
+            <mat-error *ngIf="addForm.get('birthDate')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Állampolgárság</mat-label>
+            <input matInput formControlName="nationality" required>
+            <mat-icon matIconPrefix>flag</mat-icon>
+            <mat-error *ngIf="addForm.get('nationality')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Lakcím</mat-label>
+            <input matInput formControlName="primaryAddress" required>
+            <mat-icon matIconPrefix>home</mat-icon>
+            <mat-error *ngIf="addForm.get('primaryAddress')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Employment Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>work</mat-icon>
+          Munkaviszony adatok
+        </h3>
+
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Cég</mat-label>
+            <input matInput formControlName="companyName" required>
+            <mat-icon matIconPrefix>business</mat-icon>
+            <mat-error *ngIf="addForm.get('companyName')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Munkakezdés dátuma</mat-label>
+            <input matInput type="date" formControlName="startDate" required>
+            <mat-icon matIconPrefix>event</mat-icon>
+            <mat-error *ngIf="addForm.get('startDate')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Szobaszám</mat-label>
+            <input matInput formControlName="roomNumber">
+            <mat-icon matIconPrefix>meeting_room</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Official Documents Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>description</mat-icon>
+          Hivatalos dokumentumok
+        </h3>
+
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Adóazonosító jel</mat-label>
+            <input matInput formControlName="taxId" required>
+            <mat-icon matIconPrefix>badge</mat-icon>
+            <mat-error *ngIf="addForm.get('taxId')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>TAJ szám</mat-label>
+            <input matInput formControlName="tajNumber" required>
+            <mat-icon matIconPrefix>medical_services</mat-icon>
+            <mat-error *ngIf="addForm.get('tajNumber')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Személyi igazolvány szám</mat-label>
+            <input matInput formControlName="idCardNumber" required>
+            <mat-icon matIconPrefix>credit_card</mat-icon>
+            <mat-error *ngIf="addForm.get('idCardNumber')?.hasError('required')">
+              Kötelező mező
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Dialog Actions -->
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="close()" class="cancel-button" [disabled]="loading">
+      Mégse
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="save-button"
+      (click)="save()"
+      [disabled]="loading || addForm.invalid">
+      <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+      <mat-icon *ngIf="!loading">person_add</mat-icon>
+      <span *ngIf="!loading">Létrehozás</span>
+      <span *ngIf="loading">Létrehozás...</span>
+    </button>
+  </div>
+</div>
+

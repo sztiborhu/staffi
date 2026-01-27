@@ -1,0 +1,104 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <mat-icon>info</mat-icon>
+      Audit Napló Részletei
+    </h2>
+    <button mat-icon-button (click)="close()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <!-- Basic Information -->
+    <div class="info-section">
+      <h3 class="section-title">Alapadatok</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Időpont:</span>
+          <span class="value">{{ formatTimestamp(data.timestamp) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Művelet:</span>
+          <span class="value">
+            <mat-icon class="inline-icon">{{ data.action === 'CREATE' ? 'add_circle' : data.action === 'UPDATE' ? 'edit' : 'delete' }}</mat-icon>
+            {{ data.action }}
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="label">Entitás:</span>
+          <span class="value">{{ data.entityType }} #{{ data.entityId }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Felhasználó:</span>
+          <span class="value">{{ data.userEmail }} ({{ data.userRole }})</span>
+        </div>
+        <div class="info-item full-width">
+          <span class="label">Leírás:</span>
+          <span class="value">{{ data.description }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">IP cím:</span>
+          <span class="value">{{ data.ipAddress }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Changes -->
+    <div class="changes-section" *ngIf="changes.length > 0">
+      <h3 class="section-title">Változások</h3>
+
+      <mat-tab-group>
+        <!-- Summary Tab -->
+        <mat-tab label="Összefoglaló">
+          <div class="tab-content">
+            <div class="changes-list">
+              <div class="change-item" *ngFor="let change of changes">
+                <div class="field-name">{{ change.field }}</div>
+                <div class="change-values">
+                  <div class="old-value">
+                    <span class="label">{{ getOldValueLabel() }}</span>
+                    <span class="value">{{ change.oldValue }}</span>
+                  </div>
+                  <mat-icon class="arrow-icon" *ngIf="data.action !== 'DELETE'">arrow_forward</mat-icon>
+                  <mat-icon class="arrow-icon delete-icon" *ngIf="data.action === 'DELETE'">delete</mat-icon>
+                  <div class="new-value" [class.deleted-value]="data.action === 'DELETE'">
+                    <span class="label">{{ getNewValueLabel() }}</span>
+                    <span class="value">{{ change.newValue }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Old Value Tab -->
+        <mat-tab label="Régi érték" *ngIf="oldValueObj">
+          <div class="tab-content">
+            <pre class="json-display">{{ formatJSON(oldValueObj) }}</pre>
+          </div>
+        </mat-tab>
+
+        <!-- New Value Tab -->
+        <mat-tab label="Új érték" *ngIf="newValueObj">
+          <div class="tab-content">
+            <pre class="json-display">{{ formatJSON(newValueObj) }}</pre>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <!-- No Changes -->
+    <div class="no-changes" *ngIf="changes.length === 0">
+      <mat-icon>info</mat-icon>
+      <p>Nincs megjeleníthető változás</p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" (click)="close()">
+      Bezárás
+    </button>
+  </mat-dialog-actions>
+</div>
+

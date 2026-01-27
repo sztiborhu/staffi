@@ -1,0 +1,160 @@
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+// Top Navigation Bar
+.top-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+  padding: 0 16px;
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 50%, #0d47a1 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .menu-button {
+    margin-right: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: white;
+
+    .brand-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
+
+    .brand-name {
+      color: white;
+
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .user-section {
+    .user-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+
+      .user-name {
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+
+      .dropdown-icon {
+        margin-left: -4px;
+      }
+    }
+  }
+}
+
+// Sidenav Container
+.sidenav-container {
+  flex: 1;
+  margin-top: 64px;
+  height: calc(100vh - 64px);
+}
+
+// Side Navigation
+.sidenav {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  padding-top: 16px;
+
+  mat-nav-list {
+    padding-top: 0;
+
+    a[mat-list-item] {
+      color: #475569;
+      border-radius: 0;
+      margin: 4px 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      height: 48px;
+
+      mat-icon {
+        color: #64748b;
+        transition: color 0.2s;
+      }
+
+      &:hover {
+        background-color: #f8fafc;
+        color: #1e88e5;
+
+        mat-icon {
+          color: #1e88e5;
+        }
+      }
+
+      &.active-link {
+        background-color: rgba(30, 136, 229, 0.1);
+        color: #1e88e5;
+        font-weight: 600;
+
+        mat-icon {
+          color: #1e88e5;
+        }
+      }
+    }
+
+    mat-divider {
+      margin: 16px 0;
+    }
+  }
+}
+
+// Main Content
+.main-content {
+  background-color: #f5f7fa;
+  overflow-x: hidden;
+}
+
+.content-wrapper {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  @media (max-width: 640px) {
+    padding: 16px;
+  }
+}
+
+// Animations
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidenav {
+  animation: slideInLeft 0.3s ease-out;
+}
+

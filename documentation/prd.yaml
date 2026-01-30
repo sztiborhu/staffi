@@ -1,0 +1,50 @@
+meta:
+  version: "0.1"
+  last_updated: "2026-01-20"
+problem:
+  statement: "A munkaerőkölcsönző cégek Magyarországon elavult, széttagolt rendszereket használnak a dolgozók, szálláshelyek és előlegkérések kezelésére, ami adminisztrációs hibákhoz és alacsony hatékonysághoz vezet."
+target_audience:
+  personas:
+    - name: "Kovács Éva, HR Manager"
+      segment: "Munkaerőkölcsönző cég HR vezetője, dolgozók és szállások kezelése"
+      needs:
+        - "Gyors hozzáférés dolgozói adatokhoz"
+        - "Automatikus szerződésgenerálás"
+        - "Áttekinthető szálláshely-foglaltság"
+    - name: "Szabó János, Munkavállaló"
+      segment: "Külföldi munkavállalás, előleg igénylés"
+      needs:
+        - "Egyszerű előlegkérési folyamat"
+        - "Szálláshellyel kapcsolatos információk"
+        - "Szerződés és adatok megtekintése"
+value_proposition:
+  concise: "A Staffi egy vállalatirányítási rendszer, amely egyetlen platformon integrálja a dolgozói nyilvántartást, szálláshelyek menedzsmentjét és az előlegkezelést, így 60%-kal csökkenti az adminisztrációs időt."
+  differentiators:
+    - "Monolith architektúra Spring Boot-tal"
+    - "Automatikus PDF szerződésgenerálás"
+    - "Modern Angular frontend Material Design-nal"
+scope:
+  in:
+    - "Felhasználó authentikáció JWT-vel (Admin, HR, Employee szerepkörök)"
+    - "Dolgozó menedzsment (CRUD, szerződések, státusz követés)"
+    - "Szállás menedzsment (szálláshelyek, szobák, dolgozók allokációja)"
+    - "Előleg menedzsment (kérelem, törlesztés)"
+    - "Dokumentum generálás (PDF szerződések előre kitöltött adatokkal)"
+  out:
+    - "Email/SMS értesítések"
+success_metrics:
+  - "Minden mikroszolgáltatás működik és kommunikál"
+  - "≥90% API endpoint lefedettség"
+  - "Unit test coverage >70% backend-en"
+risks:
+  - "Időhiány - MVP megközelítés szükséges (core funkciók prioritizálása)"
+research_summary:
+  insights:
+    - "200+ munkaerőkölcsönző cég működik Magyarországon"
+    - "A cégek ~70%-a Excel táblázatokban vezeti a dolgozókat és szálláshelyeket"
+    - "Mikroszolgáltatás architektúra skálázhatóbb mint monolith, de komplexebb"
+  pain_points:
+    - "Dolgozói adatok szétszóródása (Excel, email, papír)"
+    - "Szálláshely allokáció manuális követése hibákhoz vezet"
+    - "Előlegkérések email-ben elvesznek, nincs audit trail"
+    - "Szerződések manuális kitöltése lassú (15-20 perc/szerződés)"

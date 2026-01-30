@@ -49,7 +49,7 @@ Teljes körű adatbázis a munkavállalókról, beleértve a személyes adatokat
 4.  **Keresés:** Használja a felső keresősávot név, e-mail, cégnév vagy szobaszám szerinti szűréshez.
 5. **Módosítás:** Használja a "Szerkesztés" gombot az alkalmazott adatainak szerkesztéséhez.
 6. **Szerződések:** Megtekintheti és létrehozhatja az alkalmazotthoz tartozó szerződéseket a "Szerződések" gombbal.
-
+![Alkalmazottak kezelése](screenshots/employees.png)
 ---
 
 ### 3.2.1 Szállás és Szobabeosztás (Csak HR)
@@ -66,6 +66,8 @@ A szálláshelyek (pl. Munkásszállók) és szobák kapacitásának kezelése, 
 2.  Az épület szerkesztéséhez kattintson a "Szerkesztés" gombra.
 3.  Ha a szobákat szeretné szerkeszteni, kattintson a "Szobák kezelése" gombra.
 4.  Válassza ki a szerkesztendő szobát a "Szoba szerkesztése gomb" segítségével, vagy törölje a szobát.
+![Szálláshelyek kezelése](screenshots/accodomations.png)
+
 
 ---
 
@@ -78,6 +80,7 @@ A dolgozók egyszerűen igényelhetnek fizetési előleget, amelyet a HR bírál
 2.  Adja meg az igényelt **Összeget** és az **Indoklást**.
 3.  Kattintson a **Küldés** gombra.
 4.  Az igény állapota (Függőben/Elfogadva/Elutasítva) a "Kérelmeim" listában követhető.
+![Előlegigénylés](screenshots/advance.png)
 
 ---
 
@@ -90,6 +93,7 @@ A beérkező igények jóváhagyása vagy elutasítása.
 2.  A listában látja a `Folyamatban` státuszú kéréseket.
 3.  Kattintson a **Részletek** gombra.
 4.  Válassza az `Jóváhagyom` (Elfogadva) vagy `Elutasítom` (Elutasítva) opciót. Elutasítás esetén indoklás megadása kötelező.
+![Előleg bírálat](screenshots/advance_review.png)
 
 ---
 
@@ -103,9 +107,10 @@ PDF munkaszerződés automatikus előállítása a dolgozó adatai alapján.
 3.  Kattintson az **Új szerződés** gombra.
 4.  Adja meg a szerződés paramétereit (Kezdés dátuma, Órabér, Pénznem).
 5.  A rendszer létrehozza a PDF fájl, amit utána le tud tölteni a megfelelő gombbal.
+![Előleg bírálat](screenshots/contract.png)
 
 
-# TODO IMAGE TODO
+
 ---
 
 ## 4. Gyakori Feladatok

@@ -66,7 +66,7 @@ A szálláshelyek (pl. Munkásszállók) és szobák kapacitásának kezelése, 
 2.  Az épület szerkesztéséhez kattintson a "Szerkesztés" gombra.
 3.  Ha a szobákat szeretné szerkeszteni, kattintson a "Szobák kezelése" gombra.
 4.  Válassza ki a szerkesztendő szobát a "Szoba szerkesztése gomb" segítségével, vagy törölje a szobát.
-![Szálláshelyek kezelése](screenshots/accodomations.png)
+![Szálláshelyek kezelése](screenshots/accommodations.png)
 
 
 ---

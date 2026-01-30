@@ -15,14 +15,14 @@ spring:
   # JPA/Hibernate Configuration
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: validate
     #show-sql: true
     #properties.hibernate.format_sql: true
 
 security:
   jwt:
     token:
-      secret-key: "brNly3v5Up8a%XIWhztBtE&qghGEJXAW"
+      secret-key: ""
 
 # Springdoc OpenAPI Configuration
 springdoc:

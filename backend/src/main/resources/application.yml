@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/staffi_backend
     username: postgres
-    password: stroyervok
+    password: randompassword
     driver-class-name: org.postgresql.Driver
   # JPA/Hibernate Configuration
   jpa:

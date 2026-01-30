@@ -46,11 +46,19 @@ A rendszer moduláris felépítésű, az alábbi fő funkciókkal:
 
 ## 3. Képernyőképek / Demó
 
-*(A képernyőképek helye - a projekt futtatása után tölthető fel)*
-
 * **Login Képernyő:** Bejelentkezés email/jelszó párossal.
-* **HR Dashboard:** Áttekintés az aktív dolgozókról és szabad ágyakról.
+![Bejelentkező képernyő](documentation/screenshots/login_screen.png)
+
+* **HR Dashboard:** Alapvető statisztikák.
+![Admin Dashboard](documentation/screenshots/admin_dashboard.png)
+
+
 * **Szobabeosztás:** Vizuális lista a szobák foglaltságáról.
+![Szobák](documentation/screenshots/rooms.png)
+
+* **Alkalmazott Dashboard:** Alkalmazott funkciók elérése.
+![Alkalmazott Dashboard](documentation/screenshots/employee_dashboard.png)
+
 
 ---
 
@@ -80,9 +88,9 @@ cd staffi
 Hozzon létre egy PostgreSQL adatbázist és felhasználót:
 
 ```sql
-CREATE DATABASE staffi_db;
+CREATE DATABASE staffi_backend;
 CREATE USER staffi_user WITH ENCRYPTED PASSWORD 'secret';
-GRANT ALL PRIVILEGES ON DATABASE staffi_db TO staffi_user;
+GRANT ALL PRIVILEGES ON DATABASE staffi_backend TO staffi_user;
 
 ```
 
@@ -111,7 +119,7 @@ A backend konfigurációja a `backend/src/main/resources/application.yml` fájlb
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/staffi_db
+    url: jdbc:postgresql://localhost:5432/staffi_backend
     username: staffi_user
     password: secret # Cserélje le!
     driver-class-name: org.postgresql.Driver

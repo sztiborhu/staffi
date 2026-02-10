@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from '../../../services/authservice/auth.service';
+import { EmployeeService } from '../../../services/employee/employee.service';
 
 interface UserData {
   id: number;
@@ -73,6 +74,7 @@ export class EmployeeDashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private employeeService: EmployeeService,
     private router: Router
   ) {}
 
@@ -81,9 +83,28 @@ export class EmployeeDashboardComponent implements OnInit {
   }
 
   loadUserData(): void {
+    // First get basic user data from localStorage
     const user = this.authService.getUserData();
     if (user) {
       this.userData = user;
+
+      // Then fetch complete employee profile from API
+      this.authService.getCurrentUserProfile().subscribe({
+        next: (profile) => {
+          this.userData = {
+            id: profile.id,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email,
+            role: profile.role,
+            companyName: profile.companyName,
+            roomNumber: profile.roomNumber
+          };
+        },
+        error: (error) => {
+          // Keep using the basic user data from localStorage if API call fails
+        }
+      });
     }
   }
 

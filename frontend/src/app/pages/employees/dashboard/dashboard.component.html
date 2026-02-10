@@ -88,31 +88,7 @@
     <!-- Information Cards -->
 
     <div class="info-cards">
-      <!-- Room Info Card -->
-      <mat-card class="info-card" *ngIf="userData?.roomNumber">
-        <mat-card-content>
-          <div class="card-header">
-            <mat-icon>meeting_room</mat-icon>
-            <h3>Szállás</h3>
-          </div>
-          <div class="card-body">
-            <div class="info-row">
-              <span class="label">Szobaszám:</span>
-              <span class="value">{{ userData?.roomNumber }}</span>
-            </div>
-            <div class="info-row">
-              <span class="label">Cég:</span>
-              <span class="value">{{ userData?.companyName || 'N/A' }}</span>
-            </div>
-          </div>
-          <div class="card-footer">
-            <button mat-stroked-button (click)="navigateTo('/employees/room')">
-              <mat-icon>arrow_forward</mat-icon>
-              Részletek
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
+
     </div>
 
     <!-- Help Section -->

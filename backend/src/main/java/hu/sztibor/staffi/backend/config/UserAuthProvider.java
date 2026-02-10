@@ -57,10 +57,8 @@ public class UserAuthProvider {
             Long userId = decoded.getClaim("id").asLong();
             String roleString = decoded.getClaim("role").asString();
 
-            // Check if user is still active in database
             User userInDb = userRepository.findById(userId).orElse(null);
             if (userInDb == null || !userInDb.isActive()) {
-                // User doesn't exist or is inactive - invalidate token
                 return null;
             }
 
